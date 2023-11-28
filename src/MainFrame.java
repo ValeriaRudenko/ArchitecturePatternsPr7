@@ -82,7 +82,7 @@ public class MainFrame extends JFrame {
         String[] countryOptions = {"France", "Belgium", "Spain", "Luxembourg", "Netherlands", "Lithuania", "Germany",
                 "Austria", "Italy", "United Kingdom", "Portugal", "United States", "Czech Republic", "Slovakia",
                 "Poland", "Sweden", "Romania", "Hungary", "Denmark"};
-        String[] prices = {"None", "0", "1", "2", "3", "4", "5", "6", "8", "10", "15", "20", "25", "30", "35", "40",
+        String[] prices = {"0", "1", "2", "3", "4", "5", "6", "8", "10", "15", "20", "25", "30", "35", "40",
                 "45", "50", "60", "70", "80", "90", "100", "150", "200", "250", "300", "400", "500", "750", "1000",
                 "1500", "2000", "2500", "3000", "4000", "5000", "7500", "10000", "15000", "20000"};
         Integer[] favourites = {0, 5, 10, 15, 20, 25, 30, 40, 50, 100};
@@ -98,7 +98,93 @@ public class MainFrame extends JFrame {
         // Search button
         // When pressed, the program will use the Vinted API
         searchButton = new JButton("Search items");
-        // An action listener should be defined here
+        // Action listener should be defined here
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // We declare the variables
+                String countryValue;
+                int pageValue;
+                String itemValue;
+                int minPriceValue = -1;
+                int maxPriceValue = -1;
+                int favourites = -1;
+
+                // We give values to the variables
+                switch(country.getSelectedItem().toString()) {
+                    case "France":
+                        countryValue = "fr";
+                        break;
+                    case "Belgium":
+                        countryValue = "be";
+                        break;
+                    case "Spain":
+                        countryValue = "es";
+                        break;
+                    case "Luxembourg":
+                        countryValue = "lu";
+                        break;
+                    case "Netherlands":
+                        countryValue = "nl";
+                        break;
+                    case "Lithuania":
+                        countryValue = "lt";
+                        break;
+                    case "Germany":
+                        countryValue = "de";
+                        break;
+                    case "Austria":
+                        countryValue = "at";
+                        break;
+                    case "Italy":
+                        countryValue = "it";
+                        break;
+                    case "United Kingdom":
+                        countryValue = "gb";
+                        break;
+                    case "Portugal":
+                        countryValue = "pt";
+                        break;
+                    case "United States":
+                        countryValue = "us";
+                        break;
+                    case "Czech Republic":
+                        countryValue = "cz";
+                        break;
+                    case "Slovakia":
+                        countryValue = "sk";
+                        break;
+                    case "Poland":
+                        countryValue = "pl";
+                        break;
+                    case "Sweden":
+                        countryValue = "se";
+                        break;
+                    case "Romania":
+                        countryValue = "ro";
+                        break;
+                    case "Hungary":
+                        countryValue = "hu";
+                        break;
+                    case "Denmark":
+                        countryValue = "dk";
+                        break;
+                    default:
+                        countryValue = "es";
+                        break;
+                }
+                pageValue = Integer.parseInt(noOfpage.getSelectedItem().toString());
+                itemValue = keyword.getText();
+                minPriceValue = Integer.parseInt(minPrice.getSelectedItem().toString());
+                maxPriceValue = Integer.parseInt(maxPrice.getSelectedItem().toString());
+                favourites = Integer.parseInt(noOfFavourites.getSelectedItem().toString());
+
+                // Printing to test if everything is going well
+                // System.out.print(countryValue + " " + pageValue + " " + itemValue + " " + minPriceValue + " " + maxPriceValue + " " + favourites + '\n');
+
+                // VintedApiSubject search = new VintedApiSubject(page, item, minPrice, maxPrice);
+            }
+        });
 
         // Add stuff to the panels and main frame
         // Filters panel
