@@ -6,10 +6,16 @@ import javax.swing.*;
 import java.util.List;
 
 public class PrintObserver implements Observer {
+  ProductFrame productFrame;
   @Override
   public void update(List<Product> productList) {
     SwingUtilities.invokeLater(() -> {
-      ProductFrame productFrame = new ProductFrame(productList);
+      productFrame = new ProductFrame(productList);
     });
+  }
+  public void removepreviousFrame(){
+    if (productFrame != null) {
+      productFrame.dispose();
+    }
   }
 }

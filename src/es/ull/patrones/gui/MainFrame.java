@@ -136,9 +136,12 @@ public class MainFrame extends JFrame {
         this.setVisible(true);
     }
     // Method to manage when the button is pressed
+    Observer printObserver;
     private void onSearchButtonClick() {
         VintedApiSubject vintedApiSubject = new VintedApiSubject();
-        Observer printObserver = new PrintObserver();
+        if(printObserver!=null)
+            printObserver.removepreviousFrame();
+        printObserver = new PrintObserver();
         // Input fields values
         String keywordValue = keyword.getText();
         int noOfPageValue = (int) noOfpage.getSelectedItem();
