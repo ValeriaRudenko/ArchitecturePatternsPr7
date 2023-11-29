@@ -19,13 +19,13 @@ public class ProductFrame extends JFrame {
     }
 
     private void initializeFrame() {
-        this.setTitle("Resultado de la búsqueda");
+        this.setTitle("Results");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(700, 700);
-        this.setBackground(new Color(190, 245, 255));
 
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(190, 245, 255));
 
         JScrollPane scrollPane = new JScrollPane(panel);
         this.add(scrollPane);
@@ -35,19 +35,19 @@ public class ProductFrame extends JFrame {
         panel.removeAll();  // Limpiar el panel antes de mostrar nuevos productos
 
         if (productList.isEmpty()) {
-            panel.add(new JLabel("La lista de productos está vacía."));
+            panel.add(new JLabel("No results were found."));
         } else {
             for (Product product : productList) {
                 // Construir etiquetas con detalles del producto
-                JLabel productIdLabel = createCopyableLabel("Product ID: " + product.getProductId());
+                JLabel imageLabel;
+                // product.
                 JLabel titleLabel = createCopyableLabel("Title: " + product.getTitle());
                 JLabel urlLabel = createCopyableLabel("URL: " + product.getUrl());
-                JLabel favouritesLabel = createCopyableLabel("Favoritos: " + product.getFavourites());
-                JLabel totalAmountLabel = createCopyableLabel("Total Amount: " + product.getTotalAmount() + " " + product.getCurrency());
+                JLabel favouritesLabel = createCopyableLabel("Favourites: " + product.getFavourites());
+                JLabel totalAmountLabel = createCopyableLabel("Price (including taxes): " + product.getTotalAmount() + " " + product.getCurrency());
                 JLabel separator = new JLabel("-------------------------");
 
                 // Añadir etiquetas al panel
-                panel.add(productIdLabel);
                 panel.add(titleLabel);
                 panel.add(urlLabel);
                 panel.add(favouritesLabel);
@@ -70,7 +70,7 @@ public class ProductFrame extends JFrame {
                 StringSelection stringSelection = new StringSelection(label.getText());
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);
-                JOptionPane.showMessageDialog(null, "Texto copiado al portapapeles");
+                JOptionPane.showMessageDialog(null, "Copied to clipboard!");
             }
         });
         return label;
