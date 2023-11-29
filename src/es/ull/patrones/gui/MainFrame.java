@@ -1,3 +1,5 @@
+package es.ull.patrones.gui;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -182,7 +184,7 @@ public class MainFrame extends JFrame {
                 // Printing to test if everything is going well
                 // System.out.print(countryValue + " " + pageValue + " " + itemValue + " " + minPriceValue + " " + maxPriceValue + " " + favourites + '\n');
 
-                // VintedApiSubject search = new VintedApiSubject(page, item, minPrice, maxPrice);
+                // VintedApiSubject search = new VintedApiSubject(favourites, page, item, minPrice, maxPrice);
             }
         });
 
