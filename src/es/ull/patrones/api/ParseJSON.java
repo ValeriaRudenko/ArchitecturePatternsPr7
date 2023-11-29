@@ -3,47 +3,41 @@ package es.ull.patrones.api;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParseJSON {
 
-  //ProductData productData;
+  private List<Product> productList;
 
-  public ParseJSON(String data) {
-    doParsing(data);
+  public ParseJSON(String data, int noOfFavouritesValue) {
+    doParsing(data, noOfFavouritesValue);
   }
 
-  public void doParsing(String data) {
+  public void doParsing(String data, int noOfFavouritesValue) {
     JSONArray productsArray = new JSONArray(data);
-
+    productList = new ArrayList<>();
     // Assuming each item in the array represents a product
     for (int i = 0; i < productsArray.length(); i++) {
       JSONObject productJson = productsArray.getJSONObject(i);
       int favourites = productJson.getInt("favourites");
+
       // Extract product details from the JSON and create corresponding objects
-      if (favourites >= 15) {
+      if (favourites >= noOfFavouritesValue) {
         int productId = productJson.getInt("productId");
         String title = productJson.getString("title");
         String url = productJson.getString("url");
         JSONObject price = productJson.getJSONObject("price");
         String totalAmount = price.getString("totalAmount");
         String currency = price.getString("currency");
-        // ... (extract other product details)
-        System.out.println("Product ID: " + productId);
-        System.out.println("Title: " + title);
-        System.out.println("URL: " + url);
-        System.out.println("Total Amount: " + totalAmount + " " + currency);
-        System.out.println("-------------------------");
+
+        Product product = new Product(productId, title, url, favourites, totalAmount, currency);
+        productList.add(product);
       }
-
-
-      // You can do something with the product object, like adding it to a list
-      // productList.add(product);
     }
-
-    // If needed, you can create a ProductData object to encapsulate the list of products
-    // productData = new ProductData(productList);
   }
 
-  /*public ProductData getProductData() {
-    return productData;
-  }*/
+  public List<Product> getProductList() {
+    return productList;
+  }
 }
