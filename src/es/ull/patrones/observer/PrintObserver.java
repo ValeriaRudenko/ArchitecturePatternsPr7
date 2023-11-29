@@ -1,12 +1,15 @@
 package es.ull.patrones.observer;
 
-import es.ull.patrones.observer.Observer;
+import es.ull.patrones.api.Product;
+import es.ull.patrones.gui.ProductFrame;
+import javax.swing.*;
+import java.util.List;
 
 public class PrintObserver implements Observer {
   @Override
-  public void update(String data) {
-    System.out.println("Inicio");
-    System.out.println(data);
-    System.out.println("Fin");
+  public void update(List<Product> productList) {
+    SwingUtilities.invokeLater(() -> {
+      ProductFrame productFrame = new ProductFrame(productList);
+    });
   }
 }

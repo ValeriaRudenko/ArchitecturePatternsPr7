@@ -1,3 +1,9 @@
+package es.ull.patrones.gui;
+
+import es.ull.patrones.api.VintedApiSubject;
+import es.ull.patrones.observer.Observer;
+import es.ull.patrones.observer.PrintObserver;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,8 +33,8 @@ public class MainFrame extends JFrame {
     private JTextField keyword;
     private JComboBox<String> country;
     private JComboBox<Integer> noOfpage;
-    private JComboBox<String> minPrice;
-    private JComboBox<String> maxPrice;
+    private JTextField minPrice;
+    private JTextField maxPrice;
     private JComboBox<Integer> noOfFavourites;
 
     // Buttons
@@ -82,110 +88,27 @@ public class MainFrame extends JFrame {
         String[] countryOptions = {"France", "Belgium", "Spain", "Luxembourg", "Netherlands", "Lithuania", "Germany",
                 "Austria", "Italy", "United Kingdom", "Portugal", "United States", "Czech Republic", "Slovakia",
                 "Poland", "Sweden", "Romania", "Hungary", "Denmark"};
-        String[] prices = {"0", "1", "2", "3", "4", "5", "6", "8", "10", "15", "20", "25", "30", "35", "40",
-                "45", "50", "60", "70", "80", "90", "100", "150", "200", "250", "300", "400", "500", "750", "1000",
-                "1500", "2000", "2500", "3000", "4000", "5000", "7500", "10000", "15000", "20000"};
         Integer[] favourites = {0, 5, 10, 15, 20, 25, 30, 40, 50, 100};
 
         // Search text fields
         keyword = new JTextField(20);
         noOfpage = new JComboBox<>(pages);
         country = new JComboBox<>(countryOptions);
-        minPrice = new JComboBox<String>(prices);
-        maxPrice = new JComboBox<String>(prices);
+        minPrice = new JTextField(20);
+        maxPrice = new JTextField(20);
         noOfFavourites = new JComboBox<Integer>(favourites);
 
         // Search button
         // When pressed, the program will use the Vinted API
         searchButton = new JButton("Search items");
-        // Action listener should be defined here
+        // An action listener should be defined here
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // We declare the variables
-                String countryValue;
-                int pageValue;
-                String itemValue;
-                int minPriceValue = -1;
-                int maxPriceValue = -1;
-                int favourites = -1;
-
-                // We give values to the variables
-                switch(country.getSelectedItem().toString()) {
-                    case "France":
-                        countryValue = "fr";
-                        break;
-                    case "Belgium":
-                        countryValue = "be";
-                        break;
-                    case "Spain":
-                        countryValue = "es";
-                        break;
-                    case "Luxembourg":
-                        countryValue = "lu";
-                        break;
-                    case "Netherlands":
-                        countryValue = "nl";
-                        break;
-                    case "Lithuania":
-                        countryValue = "lt";
-                        break;
-                    case "Germany":
-                        countryValue = "de";
-                        break;
-                    case "Austria":
-                        countryValue = "at";
-                        break;
-                    case "Italy":
-                        countryValue = "it";
-                        break;
-                    case "United Kingdom":
-                        countryValue = "gb";
-                        break;
-                    case "Portugal":
-                        countryValue = "pt";
-                        break;
-                    case "United States":
-                        countryValue = "us";
-                        break;
-                    case "Czech Republic":
-                        countryValue = "cz";
-                        break;
-                    case "Slovakia":
-                        countryValue = "sk";
-                        break;
-                    case "Poland":
-                        countryValue = "pl";
-                        break;
-                    case "Sweden":
-                        countryValue = "se";
-                        break;
-                    case "Romania":
-                        countryValue = "ro";
-                        break;
-                    case "Hungary":
-                        countryValue = "hu";
-                        break;
-                    case "Denmark":
-                        countryValue = "dk";
-                        break;
-                    default:
-                        countryValue = "es";
-                        break;
-                }
-                pageValue = Integer.parseInt(noOfpage.getSelectedItem().toString());
-                itemValue = keyword.getText();
-                minPriceValue = Integer.parseInt(minPrice.getSelectedItem().toString());
-                maxPriceValue = Integer.parseInt(maxPrice.getSelectedItem().toString());
-                favourites = Integer.parseInt(noOfFavourites.getSelectedItem().toString());
-
-                // Printing to test if everything is going well
-                // System.out.print(countryValue + " " + pageValue + " " + itemValue + " " + minPriceValue + " " + maxPriceValue + " " + favourites + '\n');
-
-                // VintedApiSubject search = new VintedApiSubject(page, item, minPrice, maxPrice);
+                // Clic event
+                onSearchButtonClick();
             }
         });
-
         // Add stuff to the panels and main frame
         // Filters panel
         filtersPanel.add(message);
@@ -211,5 +134,30 @@ public class MainFrame extends JFrame {
 
         // We assure the main frame is visible
         this.setVisible(true);
+    }
+    // Method to manage when the button is pressed
+    private void onSearchButtonClick() {
+        VintedApiSubject vintedApiSubject = new VintedApiSubject();
+        Observer printObserver = new PrintObserver();
+        // Input fields values
+        String keywordValue = keyword.getText();
+        int noOfPageValue = (int) noOfpage.getSelectedItem();
+        String countryValue = (String) country.getSelectedItem();
+        int minPriceValue = Integer.parseInt(minPrice.getText());
+        int maxPriceValue = Integer.parseInt(maxPrice.getText());
+        int noOfFavouritesValue = (int) noOfFavourites.getSelectedItem();
+        if (minPriceValue > maxPriceValue) {
+            JOptionPane.showMessageDialog(this,"ERROR DE PRECIO");
+        }
+        vintedApiSubject.addObserver(printObserver);
+        vintedApiSubject.fetchData(noOfPageValue, keywordValue, minPriceValue, maxPriceValue, noOfFavouritesValue);
+        // We search the items with the search criteria
+        String results = performSearch(keywordValue, noOfPageValue, countryValue, minPriceValue, maxPriceValue, noOfFavouritesValue);
+    }
+
+    // Method to perform search with parameters
+    private String performSearch(String keyword, int noOfPage, String country, int minPrice, int maxPrice, int noOfFavourites) {
+        return String.format("Búsqueda con:\nKeyword: %s\nNo. of Page: %d\nCountry: %s\nMin. Price: %s\nMax. Price: %s\nNo. of Favourites: %d",
+                keyword, noOfPage, country, minPrice, maxPrice, noOfFavourites);
     }
 }

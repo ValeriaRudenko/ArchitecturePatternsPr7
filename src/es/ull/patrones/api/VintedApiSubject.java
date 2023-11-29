@@ -1,7 +1,6 @@
 package es.ull.patrones.api;
 
 import es.ull.patrones.observer.Observer;
-import es.ull.patrones.observer.PrintObserver;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,28 +17,27 @@ public class VintedApiSubject {
     observers.add(observer);
   }
 
-  public void notifyObservers(String data) {
+  public void notifyObservers(List<Product> productList) {
     for (Observer observer : observers) {
-      observer.update(data);
+      observer.update(productList);
     }
   }
 
-  // Método que realiza la solicitud HTTP y procesa la respuesta
-  public void fetchData(int pagina, String objeto,int precioMin,int precioMax) {
+  // Method that performs the HTTP request and processes the response.
+  public void fetchData(int page, String object,int priceMin,int priceMax, int favourites) {
     try {
-      String obj = convertir(objeto);
+      String obj = convertir(object);
       HttpRequest request = HttpRequest.newBuilder()
-              .uri(URI.create("https://vinted3.p.rapidapi.com/getSearch?country=es&page="+pagina+"&order=relevance&keyword="+obj+"&minPrice="+precioMin+"&maxPrice="+precioMax))
-              .header("X-RapidAPI-Key", "fea5410740msha9d87817c8480e4p14a43ajsn72b7e0f19839")
+              .uri(URI.create("https://vinted3.p.rapidapi.com/getSearch?country=es&page="+page+"&order=relevance&keyword="+obj+"&minPrice="+priceMin+"&maxPrice="+priceMax))
+              .header("X-RapidAPI-Key", "25694fe3a0mshf353c05255af257p1ffd3djsnc5393d783b53")
               .header("X-RapidAPI-Host", "vinted3.p.rapidapi.com")
               .method("GET", HttpRequest.BodyPublishers.noBody())
               .build();
       HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-      // Notifica a los observadores con los datos procesados
-      //System.out.println(response.body()); Muestra la lista de objetos
+      //Notifies observers with processed data
       data = response.body();
-      new ParseJSON(data);
-      //notifyObservers(result.toString());
+      ParseJSON parser = new ParseJSON(data, favourites);
+      notifyObservers(parser.getProductList());
 
     } catch (InterruptedException | IOException e) {
       throw new RuntimeException(e);
@@ -47,8 +45,6 @@ public class VintedApiSubject {
   }
 
   public String convertir(String objeto) {
-    String obj = objeto.replace(" ", "%20");
-    System.out.println(obj);
-    return obj;
+    return objeto.replace(" ", "%20");
   }
 }

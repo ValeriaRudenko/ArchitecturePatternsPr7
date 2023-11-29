@@ -1,9 +1,8 @@
 package es.ull.patrones.observer;
 
-import es.ull.patrones.api.ParseJSON;
-
-import es.ull.patrones.api.VintedApiSubject;
+import es.ull.patrones.api.Product;
+import java.util.List;
 
 public interface Observer {
-  void update(String data);
+  void update(List<Product> productList);
 }
