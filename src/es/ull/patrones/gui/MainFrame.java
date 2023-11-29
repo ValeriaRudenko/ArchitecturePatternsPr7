@@ -153,9 +153,6 @@ public class MainFrame extends JFrame {
         vintedApiSubject.fetchData(noOfPageValue, keywordValue, minPriceValue, maxPriceValue, noOfFavouritesValue);
         // We search the items with the search criteria
         String results = performSearch(keywordValue, noOfPageValue, countryValue, minPriceValue, maxPriceValue, noOfFavouritesValue);
-
-        // Test
-        JOptionPane.showMessageDialog(this, "Resultados de la búsqueda:\n" + results);
     }
 
     // Method to perform search with parameters
