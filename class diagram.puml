@@ -1,0 +1,81 @@
+@startuml
+class es.ull.patrones.observer.PrintObserver {
++ void update(List<Product>)
+}
+class Main {
++ {static} void main(String[])
+}
+class es.ull.patrones.api.Product {
+- int productId
+- String title
+- String url
+- int favourites
+- String totalAmount
+- String currency
++ int getProductId()
++ String getTitle()
++ String getUrl()
++ int getFavourites()
++ String getTotalAmount()
++ String getCurrency()
++ void setProductId(int)
++ void setTitle(String)
++ void setUrl(String)
++ void setFavourites(int)
++ void setTotalAmount(String)
++ void setCurrency(String)
+}
+class es.ull.patrones.gui.MainFrame {
+- JPanel filtersPanel
+- JPanel buttonsPanel
+- JPanel logoPanel
+- JLabel noOfFavouritesLabel
+- JLabel keywordLabel
+- JLabel countryLabel
+- JLabel noOfpageLabel
+- JLabel minPriceLabel
+- JLabel maxPriceLabel
+- JLabel message
+- JLabel vintedLogo
+- JTextField keyword
+- JComboBox<String> country
+- JComboBox<Integer> noOfpage
+- JTextField minPrice
+- JTextField maxPrice
+- JComboBox<Integer> noOfFavourites
+- JButton searchButton
+- void onSearchButtonClick()
+- String performSearch(String,int,String,int,int,int)
+}
+class es.ull.patrones.app.App {
++ void run()
+}
+class es.ull.patrones.gui.ProductFrame {
+- JPanel panel
+- void initializeFrame()
+- void displayProducts(List<Product>)
+- JLabel createCopyableLabel(String)
++ void closeFrame()
+}
+interface es.ull.patrones.observer.Observer {
+~ void update(List<Product>)
+}
+class es.ull.patrones.api.ParseJSON {
+- List<Product> productList
++ void doParsing(String,int)
++ List<Product> getProductList()
+}
+class es.ull.patrones.api.VintedApiSubject {
+~ String data
+- List<Observer> observers
++ void addObserver(Observer)
++ void notifyObservers(List<Product>)
++ void fetchData(int,String,int,int,int)
++ String convertir(String)
+}
+
+
+es.ull.patrones.observer.Observer <|.. es.ull.patrones.observer.PrintObserver
+es.ull.patrones.gui.JFrame <|-- es.ull.patrones.gui.MainFrame
+es.ull.patrones.gui.JFrame <|-- es.ull.patrones.gui.ProductFrame
+@enduml
