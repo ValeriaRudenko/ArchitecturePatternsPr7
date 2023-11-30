@@ -2,12 +2,16 @@ package es.ull.patrones.gui;
 
 import es.ull.patrones.api.Product;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 public class ProductFrame extends JFrame {
@@ -32,22 +36,22 @@ public class ProductFrame extends JFrame {
     }
 
     private void displayProducts(List<Product> productList) {
-        panel.removeAll();  // Limpiar el panel antes de mostrar nuevos productos
+        panel.removeAll();  // Clear the panel before showing new products
 
         if (productList.isEmpty()) {
             panel.add(new JLabel("No results were found."));
         } else {
             for (Product product : productList) {
-                // Construir etiquetas con detalles del producto
-                JLabel imageLabel;
-                // product.
+                // Construct labels with details of the product
+                JLabel imageLabel = createAsyncImageLabel(product.getImageUrl());
                 JLabel titleLabel = createCopyableLabel("Title: " + product.getTitle());
                 JLabel urlLabel = createCopyableLabel("URL: " + product.getUrl());
                 JLabel favouritesLabel = createCopyableLabel("Favourites: " + product.getFavourites());
                 JLabel totalAmountLabel = createCopyableLabel("Price (including taxes): " + product.getTotalAmount() + " " + product.getCurrency());
                 JLabel separator = new JLabel("-------------------------");
 
-                // Añadir etiquetas al panel
+                // Add labels to the panel
+                panel.add(imageLabel);
                 panel.add(titleLabel);
                 panel.add(urlLabel);
                 panel.add(favouritesLabel);
@@ -59,6 +63,42 @@ public class ProductFrame extends JFrame {
         this.revalidate();
         this.repaint();
         this.setVisible(true);
+    }
+
+    private JLabel createAsyncImageLabel(String imageUrl) {
+        JLabel imageLabel = new JLabel();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            SwingWorker<Void, ImageIcon> worker = new SwingWorker<Void, ImageIcon>() {
+                @Override
+                protected Void doInBackground() {
+                    try {
+                        URL url = new URL(imageUrl);
+                        BufferedImage image = ImageIO.read(url);
+
+                        if (image != null) {
+                            Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                            ImageIcon imageIcon = new ImageIcon(scaledImage);
+                            publish(imageIcon);
+                        } else {
+                            System.err.println("Failed to load image from URL: " + imageUrl);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void process(List<ImageIcon> chunks) {
+                    if (!chunks.isEmpty()) {
+                        imageLabel.setIcon(chunks.get(chunks.size() - 1));
+                    }
+                }
+            };
+
+            worker.execute();
+        }
+        return imageLabel;
     }
 
     private JLabel createCopyableLabel(String text) {
