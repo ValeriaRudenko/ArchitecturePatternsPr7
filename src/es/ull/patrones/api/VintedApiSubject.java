@@ -29,7 +29,7 @@ public class VintedApiSubject {
       String obj = convertir(object);
       HttpRequest request = HttpRequest.newBuilder()
               .uri(URI.create("https://vinted3.p.rapidapi.com/getSearch?country=es&page="+page+"&order=relevance&keyword="+obj+"&minPrice="+priceMin+"&maxPrice="+priceMax))
-              .header("X-RapidAPI-Key", "25694fe3a0mshf353c05255af257p1ffd3djsnc5393d783b53")
+              .header("X-RapidAPI-Key", "27b0327141msh229d5637874896ep1e7633jsn1d252f6db918")
               .header("X-RapidAPI-Host", "vinted3.p.rapidapi.com")
               .method("GET", HttpRequest.BodyPublishers.noBody())
               .build();

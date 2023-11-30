@@ -20,6 +20,7 @@ public class ParseJSON {
     // Assuming each item in the array represents a product
     for (int i = 0; i < productsArray.length(); i++) {
       JSONObject productJson = productsArray.getJSONObject(i);
+      System.out.println(productJson);
       int favourites = productJson.getInt("favourites");
 
       // Extract product details from the JSON and create corresponding objects
@@ -30,8 +31,8 @@ public class ParseJSON {
         JSONObject price = productJson.getJSONObject("price");
         String totalAmount = price.getString("totalAmount");
         String currency = price.getString("currency");
-
-        Product product = new Product(productId, title, url, favourites, totalAmount, currency);
+        String imageUrl = productJson.getString("image");
+        Product product = new Product(productId, title, url, favourites, totalAmount, currency, imageUrl);
         productList.add(product);
       }
     }

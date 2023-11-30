@@ -7,15 +7,16 @@ public class Product {
   private int favourites;
   private String totalAmount;
   private String currency;
-
+  private String imageUrl;
   // Constructor
-  public Product(int productId, String title, String url, int favourites, String totalAmount, String currency) {
+  public Product(int productId, String title, String url, int favourites, String totalAmount, String currency, String imageUrl) {
     this.productId = productId;
     this.title = title;
     this.url = url;
     this.favourites = favourites;
     this.totalAmount = totalAmount;
     this.currency = currency;
+    this.imageUrl = imageUrl;
   }
 
   // Getters
@@ -42,8 +43,14 @@ public class Product {
   public String getCurrency() {
     return currency;
   }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
   // Setters
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
   public void setProductId(int productId) {
     this.productId = productId;
   }
